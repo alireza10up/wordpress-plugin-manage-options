@@ -20,10 +20,13 @@ function render_manage_options_view()
     if (isset($_GET['action']) && $_GET['action'] == 'add') {
         if (isset($_POST['option_save'])) {
             # save option
-            add_option(
-                sanitize_text_field($_POST['option_name'] ?? ''),
-                sanitize_text_field($_POST['option_value'] ?? ''),
-                autoload: isset($_POST['option_autoload']) ? true : false
+            $wpdb->insert(
+                "{$wpdb->prefix}options",
+                [
+                    "option_name" => sanitize_text_field($_POST['option_name'] ?? ''),
+                    "option_value" => sanitize_text_field($_POST['option_value'] ?? ''),
+                    "autoload" => isset($_POST['option_autoload']) ? true : false
+                ]
             );
         }
 

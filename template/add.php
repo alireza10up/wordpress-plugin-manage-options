@@ -1,4 +1,5 @@
 <div class="wrap">
+    <h1>Add Option</h1>
     <form method="post">
         <label>option name : </label>
         <input type="text" name="option_name"><br><br>

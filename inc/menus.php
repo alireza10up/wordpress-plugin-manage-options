@@ -19,7 +19,7 @@ function render_manage_options_view()
     # when user want to add
     if (isset($_GET['action']) && $_GET['action'] == 'add') {
         if (isset($_POST['option_save'])) {
-            # save option save
+            # save option
             add_option(
                 sanitize_text_field($_POST['option_name'] ?? ''),
                 sanitize_text_field($_POST['option_value'] ?? ''),
@@ -34,6 +34,27 @@ function render_manage_options_view()
     # delete
     if (isset($_GET['action']) && $_GET['action'] == 'delete' && $_GET['id']) {
         $wpdb->delete("{$wpdb->prefix}options", ['option_id' => $_GET['id']]);
+    }
+
+    # update
+    if (isset($_GET['action']) && $_GET['action'] == 'edit' && $_GET['id']) {
+        # update option
+        if (isset($_POST['option_update'])) {
+            $wpdb->update(
+                "{$wpdb->prefix}options",
+                [
+                    "option_name" => sanitize_text_field($_POST['option_name'] ?? ''),
+                    "option_value" => sanitize_text_field($_POST['option_value'] ?? ''),
+                    "autoload" => isset($_POST['option_autoload']) ? true : false
+                ],
+                ['option_id' => $_GET['id']],
+            );
+        }
+
+        $option = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}options WHERE option_id = %d", [intval($_GET['id'])]));
+
+        mo_template('edit', $option);
+        return;
     }
 
     # get all option

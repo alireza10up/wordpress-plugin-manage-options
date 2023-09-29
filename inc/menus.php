@@ -13,6 +13,8 @@ add_action('admin_menu', function () {
 
 function render_manage_options_view()
 {
+    # preparing
+    global $wpdb;
 
     # when user want to add
     if (isset($_GET['action']) && $_GET['action'] == 'add') {
@@ -23,25 +25,18 @@ function render_manage_options_view()
                 sanitize_text_field($_POST['option_value'] ?? ''),
                 autoload: isset($_POST['option_autoload']) ? true : false
             );
-
-            # show notice
-            add_action('admin_notices', function () {
-                ?>
-                <div class="notice notice-success is-dismissible">
-                    <p>
-                        <?= 'Added' ?>
-                    </p>
-                </div>
-                <?php
-            });
         }
 
         mo_template('add');
         return;
     }
 
+    # delete
+    if (isset($_GET['action']) && $_GET['action'] == 'delete' && $_GET['id']) {
+        $wpdb->delete("{$wpdb->prefix}options", ['option_id' => $_GET['id']]);
+    }
+
     # get all option
-    global $wpdb;
     $options = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}options WHERE LENGTH(option_name) < 20 AND LENGTH(option_value) < 30");
 
     # load template

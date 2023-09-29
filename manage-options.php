@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name:       manage options
- * Description:       A simple plugin for filtering words in WordPress
+ * Description:       A simple plugin to manage option table items
  * Version:           1.0.0
  * Author:            alireza10up
  * Author URI:        https://www.alireza10up.ir/
